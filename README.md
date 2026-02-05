@@ -505,20 +505,6 @@ channel.nack(msg, false, true);
 // Falha - requeue = false (vai para dead letter queue se configurada)
 channel.nack(msg, false, false);
 ```
-
----
-
-## 🎯 Próximos Passos
-
-Para aprofundar seus conhecimentos:
-
-1. **Dead Letter Queues**: Mensagens que falharam várias vezes
-2. **Retry Policy**: Tentar processar novamente antes de descartar
-3. **Message TTL**: Tempo de vida das mensagens
-4. **Priority Queues**: Mensagens com prioridade
-5. **Saga Pattern**: Transações distribuídas
-6. **CQRS**: Separação de comandos e queries
-
 ---
 
 ## 📚 Comandos Úteis
