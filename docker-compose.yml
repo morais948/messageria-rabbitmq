@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # RabbitMQ - Broker de Mensageria
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # Porta AMQP
+      - "15672:15672" # Porta Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microservices-network
+
+  # MySQL para Orders Service
+  mysql-orders:
+    image: mysql:8.0
+    container_name: mysql-orders
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: orders_db
+      MYSQL_USER: orders_user
+      MYSQL_PASSWORD: orders_pass
+    volumes:
+      - mysql-orders-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microservices-network
+
+  # MySQL para Payments Service
+  mysql-payments:
+    image: mysql:8.0
+    container_name: mysql-payments
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: payments_db
+      MYSQL_USER: payments_user
+      MYSQL_PASSWORD: payments_pass
+    volumes:
+      - mysql-payments-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - microservices-network
+
+networks:
+  microservices-network:
+    driver: bridge
+
+volumes:
+  mysql-orders-data:
+  mysql-payments-data:
